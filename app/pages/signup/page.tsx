@@ -35,7 +35,7 @@ const SignUp = () => {
 
         <LinkContainer>
           Already have account?
-          <Link href={'/signUp'}><LinkText>Login</LinkText></Link>
+          <Link href={'/login'}><LinkText>Login</LinkText></Link>
         </LinkContainer>
       </CardContainer ></>
 
