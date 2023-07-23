@@ -1,4 +1,6 @@
-import { AppColors, ImagePath } from "@/lib/constant";
+"use client";
+
+import { AppColors, ImagePath } from "lib/constant";
 import styled from "styled-components";
 
 export const PhotoGraphyBgContainer = styled.main`
