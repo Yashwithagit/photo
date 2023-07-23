@@ -1,10 +1,10 @@
-"use client";
+import Image from 'next/image'
+import styles from './page.module.css'
+import Link from 'next/link'
+import SignUp from './signUp/page'
 
-import Login from "./pages/login/page";
-import SignUp from "./pages/signup/page";
-
-
-
-export default function Page() {
-  return <SignUp />;
+export default function Home() {
+  return (
+    <SignUp />
+  )
 }
