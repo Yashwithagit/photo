@@ -1,85 +1,37 @@
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import Router from 'next/router';
+"use client";
+import type { NextPage } from "next";
+import { useRouter } from "next/navigation";
+
+import { useEffect, useState } from "react";
 
 
-interface User {
-  // Define your user properties here, for example:
-  id: number;
-  name: string;
-  email: string;
-}
 
-interface AuthContextValue {
-  isAuthenticated: boolean;
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  loading: boolean;
-  logout: () => void;
-}
+ const PageWithAuth = (Component:NextPage) => {
 
-const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
+  const AuthenticatedComponent = () => {
+      const router = useRouter();
+      
+      
+    
+      
+      const [ isAuth, setIsAuth ] = useState(false)
+      
+      useEffect(() => {
+        console.log(localStorage.getItem('token')!==null)
+          const getUser = async () => {
+              if (localStorage.getItem('token')==null) {
+                router.push('/login');
+              } else {
+                setIsAuth(true)
+              }
+          };
+          getUser();
+      }, [router]);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadUserFromCookies() {
-      const token = localStorage.getItem('token');
-      if (token) {
-        console.log("Got a token in the cookies, let's see if it is valid");
-        // api.defaults.headers.Authorization = `Bearer ${token}`;
-        // try {
-        //   const { data: user } = await api.get<User>('users/me');
-        //   if (user) setUser(user);
-        // } catch (error) {
-        //   console.error('Error loading user:', error);
-        // }
-      }
-      setLoading(false);
-    }
-    loadUserFromCookies();
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({email:email,password:password}),
-  });
-  console.log(response)
-      // if (token) {
-      //   console.log("Got token");
-      //   localStorage.setItem('token', token);
-      //   api.defaults.headers.Authorization = `Bearer ${token.token}`;
-      //   try {
-      //     const { data: user } = await api.get<User>('users/me');
-      //     setUser(user);
-      //     console.log("Got user", user);
-      //   } catch (error) {
-      //     console.error('Error loading user:', error);
-      //   }
-      // }
-    } catch (error) {
-      console.error('Error logging in:', error);
-    }
+      return !!isAuth ? <Component /> : null; // Render whatever you want while the authentication occurs
   };
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    setUser(null);
-    // delete api.defaults.headers.Authorization;
-    Router.push('/login');
-  };
-
-  return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, login, loading, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return AuthenticatedComponent;
 };
 
-export const useAuth = () => useContext(AuthContext);
+export default PageWithAuth

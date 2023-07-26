@@ -4,6 +4,7 @@ import { CardContainer, CardHeader, FormContainer, FormField, FormFieldIcon, For
 import Link from 'next/link'
 import * as MdIcons from 'react-icons/md'
 import * as RiIcons from 'react-icons/ri'
+import PageWithAuth from 'app/contexts/auth';
 
 
 const SignUp = () => {
@@ -43,7 +44,7 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default PageWithAuth(SignUp)
 
 
 
